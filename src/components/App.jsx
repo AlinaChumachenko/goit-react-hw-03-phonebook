@@ -47,19 +47,23 @@ export class App extends Component {
     }
   };
 
-  // showFilteredContacts = () => {
-  //   const { filter, contacts } = this.state;
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(filter)
-  //   );
-  // };
-
   removeContact = contactId => {
     this.setState(prevState => {
       return {
         contacts: prevState.contacts.filter(({ id }) => id !== contactId),
       };
     });
+  };
+
+  componentDidMount() {
+    const localData = localStorage.getItem('contacts');
+    if (localData) this.setState({ contacts: JSON.parse(localData) });
+  }
+
+  componentDidUpdate = (_, prevState) => {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
   };
 
   render() {
